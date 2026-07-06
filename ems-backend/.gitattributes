@@ -1,0 +1,9 @@
+/mvnw text eol=lf
+*.cmd text eol=crlf
+compiler.xml
+ems.iml
+encodings.xml
+jarRepositories.xml
+misc.xml
+modules.xml
+vcs.xml
