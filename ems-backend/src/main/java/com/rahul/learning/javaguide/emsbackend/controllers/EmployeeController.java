@@ -11,6 +11,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @Log4j2
 @AllArgsConstructor
 @RestController
