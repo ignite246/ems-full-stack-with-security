@@ -5,7 +5,13 @@ import { useNavigate } from 'react-router-dom';
 
 const ListEmployeeComponent = () => {
 
-    const [employees, setEmployees] = useState([]);
+    const [employees, setEmployees] = useState([{
+        "id": "0",
+        "firstName": "FirstName",
+        "lastName": "LastName",
+        "email": "Email Id"
+    }
+    ]);
 
     useEffect(() => {
         listEmployees().then((response) => {
@@ -19,6 +25,11 @@ const ListEmployeeComponent = () => {
 
     const addNewEmployee = () => {
         navigator("/add-employee");
+    }
+
+    const updateEmployee = (id) => {
+        console.log("employee to be updated...", id, typeof (id));
+        navigator(`/update-employee/${id}`);
     }
 
     return (
@@ -37,6 +48,7 @@ const ListEmployeeComponent = () => {
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email Id</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,6 +59,9 @@ const ListEmployeeComponent = () => {
                                             <td>{employee.firstName}</td>
                                             <td>{employee.lastName}</td>
                                             <td>{employee.email}</td>
+                                            <td>
+                                                <button className="btn btn-sm btn-outline-info" onClick={() => updateEmployee(employee.id)}>Update</button>
+                                            </td>
                                         </tr>
                                     )
                                 }

@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { createEmployee } from '../services/EmployeeService'
-import { useNavigate } from 'react-router-dom'
+import { createEmployee, getEmployee, updateEmployee } from '../services/EmployeeService'
+import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2';
 
 const CreateEmployeeComponent = () => {
+
+    const { id } = useParams();
 
     //for holding individual form field data
     const [currentFirstName, setUpdatedFirstName] = useState("");
@@ -12,11 +14,11 @@ const CreateEmployeeComponent = () => {
     const [email, setEmail] = useState("");
 
 
-    //form validation
+    //for holding each field validation message
     const [currentErrorMessages, setUpdatedErrorMessages] = useState({
         errorFirstNameMsg: '',
         errorLastNameMsg: '',
-        erroEmailMsg: ''
+        errorEmailMsg: ''
     });
 
     const validateFormData = () => {
@@ -38,9 +40,9 @@ const CreateEmployeeComponent = () => {
         }
 
         if (email.trim()) {
-            errorMessagesCopy.erroEmailMsg = "";
+            errorMessagesCopy.errorEmailMsg = "";
         } else {
-            errorMessagesCopy.erroEmailMsg = "Email id is required";
+            errorMessagesCopy.errorEmailMsg = "Email id is required";
             isValid = false;
         }
 
@@ -48,22 +50,33 @@ const CreateEmployeeComponent = () => {
         return isValid;
     }
 
-
-
-
     //to redirect the control
     const navigator = useNavigate();
+
+    {/* Create or Update employee */ }
     const handleFormSubmit = (e) => {
         e.preventDefault();
         if (validateFormData()) {
             const employee = { firstName: currentFirstName, lastName, email };
-            console.log("employee to be created:", employee);
-            createEmployee(employee).then((apiResponse) => {
-                console.log("Create Employee API Response:", apiResponse);
-                navigator("/employees");
-            }).catch((error) => {
-                console.log("Something went wrong while creating an employee:", error);
-            });
+            console.log("employee data from form:", employee);
+
+            if (id) {
+                updateEmployee(id, employee)
+                    .then((response) => {
+                        console.log(response.data);
+                        navigator("/employees");
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                createEmployee(employee).then((apiResponse) => {
+                    console.log("Create Employee API Response:", apiResponse);
+                    navigator("/employees");
+                }).catch((error) => {
+                    console.log("Something went wrong while creating an employee:", error);
+                });
+            }
         }
         else {
             Swal.fire({
@@ -75,12 +88,36 @@ const CreateEmployeeComponent = () => {
         }
     }
 
+    const pageTitle = () => {
+        if (id) {
+            return <h3 className='bg-warning text-light p-1 m-0'>Update Employee</h3>
+        }
+        else {
+            return <h3 className='bg-primary text-light p-1 m-0'>Create Employee</h3>
+        }
+    }
+
+    useEffect(() => {
+        console.log("Employee id:", id);
+        if (id) {
+            getEmployee(id)
+                .then((response) => {
+                    console.log(response);
+                    setUpdatedFirstName(response.data.firstName);
+                    setLastName(response.data.lastName);
+                    setEmail(response.data.email);
+                }).catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [id]);
+
     return (
         <div className='container-fluid'>
             <div className="row my-2">
                 <div className="card col-md-4 offset-md-4">
-                    <div className="card-header bg-primary-subtle">
-                        <h3 className='text-center'>Add Employee</h3>
+                    <div className="card-header text-center">
+                        {pageTitle()}
                     </div>
                     <div className="card-body">
                         <form>
@@ -117,10 +154,10 @@ const CreateEmployeeComponent = () => {
                                     placeholder='Enter a valid email id'
                                     name='email'
                                     value={email}
-                                    className={`form-control ${currentErrorMessages.erroEmailMsg ? 'is-invalid' : ''}`}
+                                    className={`form-control ${currentErrorMessages.errorEmailMsg ? 'is-invalid' : ''}`}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                {currentErrorMessages.erroEmailMsg && <div className='invalid-feedback'>{currentErrorMessages.erroEmailMsg}</div>}
+                                {currentErrorMessages.errorEmailMsg && <div className='invalid-feedback'>{currentErrorMessages.errorEmailMsg}</div>}
                             </div>
 
                             <button

@@ -30,8 +30,9 @@ public class EmployeeController {
 
     @GetMapping("{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable("id") Long employeeId) {
+        log.info("STARTS::getEmployeeById::employeeId={}", employeeId);
         EmployeeDTO employeeDTO = employeeService.getEmployeeById(employeeId);
-        return new ResponseEntity<>(employeeDTO, HttpStatus.FOUND);
+        return new ResponseEntity<>(employeeDTO, HttpStatus.OK);
     }
 
     @GetMapping
