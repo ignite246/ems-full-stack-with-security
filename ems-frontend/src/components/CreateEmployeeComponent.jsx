@@ -115,8 +115,8 @@ const CreateEmployeeComponent = () => {
     return (
         <div className='container-fluid'>
             <div className="row my-2">
-                <div className="card col-md-4 offset-md-4">
-                    <div className="card-header text-center">
+                <div className="card col-md-4 offset-md-4 p-0 border-3 border-primary">
+                    <div className="card-header text-center p-0">
                         {pageTitle()}
                     </div>
                     <div className="card-body">

@@ -39,22 +39,22 @@ const ListEmployeeComponent = () => {
         console.log("employee to be deleted with id:", id);
         deleteEmployee(id).then((response) => {
             console.log(response.data);
-             getAllEmployees();
+            getAllEmployees();
         }).catch((error) => {
             console.log(error);
         });
     }
 
     return (
-        <div className='container my-2'>
+        <div className='container-fluid my-2'>
             <div className="row">
-                <div className="card col-md-8 offset-md-2">
+                <div className="card col-lg-8 offset-lg-2 p-0 border-3 border-info-subtle">
                     <div className="card-header text-center bg-primary-subtle">
                         <h3>List of Employees</h3>
                     </div>
-                    <div className="card-body">
-                        <button className='btn btn-sm btn-primary mb-2' onClick={addNewEmployee}>Add Employee</button>
-                        <table className='table table-striped table-bordered'>
+                    <div className="card-body p-0">
+                        <button className='btn btn-sm m-2 bg-primary-subtle' onClick={addNewEmployee}>Add Employee</button>
+                        <table className='table table-striped table-bordered table-responsive'>
                             <thead>
                                 <tr>
                                     <th>Employee ID</th>

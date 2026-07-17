@@ -1,15 +1,17 @@
 package com.rahul.learning.javaguide.emsbackend.controllers;
 
 import com.rahul.learning.javaguide.emsbackend.dtos.DepartmentDTO;
-import com.rahul.learning.javaguide.emsbackend.entities.Department;
 import com.rahul.learning.javaguide.emsbackend.services.DepartmentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
+@Log4j2
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/departments")
@@ -43,6 +45,7 @@ public class DepartmentController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteDepartment(@PathVariable("id") Long id) {
+        log.info("Delete department with id={}", id);
         departmentService.deleteDepartmentById(id);
         return new ResponseEntity<>("Department deleted with id=" + id, HttpStatus.OK);
     }
