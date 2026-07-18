@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { createDepartment } from '../services/DepartmentService';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { createDepartment, getDepartmentById, updateDepartment } from '../services/DepartmentService';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const DepartmentComponent = () => {
 
     const navigator = useNavigate();
+    const { id } = useParams();
 
     //text state for form data
     const [currentDepartmentName, setDepartmentName] = useState("");
@@ -29,22 +30,53 @@ const DepartmentComponent = () => {
             setIsDescriptionError(true);
         }
 
+        console.log(isNameError, isDescriptionError)
 
-        if (isNameError && isDescriptionError) {
-            const department = { departmentName: currentDepartmentDescription, departmentDescription: currentDepartmentDescription };
+        if (!isNameError && !isDescriptionError) {
+            const department = { departmentName: currentDepartmentName, departmentDescription: currentDepartmentDescription };
 
-            createDepartment(department)
-                .then((response) => {
-                    console.log(response.data);
+            if (id) {
+                updateDepartment(id, department).then((response) => {
+                    console.log(response);
                     navigator("/departments");
                 }).catch((error) => {
-                    console.log(error);
-                });
+                    console.log(error)
+                })
+            } else {
+                createDepartment(department)
+                    .then((response) => {
+                        console.log(response.data);
+                        navigator("/departments");
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+            }
         }
         else {
             alert("Fill the form correctly...");
         }
     }
+
+    const operationName = () => {
+        if (id) {
+            return <h3>Update Department Form</h3>
+        }
+        else {
+            return <h3>Add Department Form</h3>
+        }
+    }
+
+    useEffect(() => {
+        if (id) {
+            getDepartmentById(id).then((response) => {
+                console.log(response);
+                setDepartmentName(response.data.departmentName);
+                setDepartmentDescription(response.data.departmentDescription);
+            }).catch((error) => {
+
+            });
+        }
+    }, [id]);
 
     return (
         <div className='container my-2'>
@@ -52,7 +84,7 @@ const DepartmentComponent = () => {
                 <div className="col-lg-8 offset-lg-2">
                     <div className="card border-3 border-danger-subtle">
                         <div className="card-header text-center bg-danger-subtle">
-                            <h3>Add Department Form</h3>
+                            {operationName()}
                         </div>
                         <div className="card-body">
                             <form>

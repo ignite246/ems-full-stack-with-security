@@ -3,8 +3,9 @@ import { useSearchParams } from 'react-router-dom'
 import { createEmployee, getEmployee, updateEmployee } from '../services/EmployeeService'
 import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2';
+import { getAllDepartments } from '../services/DepartmentService';
 
-const CreateEmployeeComponent = () => {
+const EmployeeComponent = () => {
 
     const { id } = useParams();
 
@@ -12,13 +13,24 @@ const CreateEmployeeComponent = () => {
     const [currentFirstName, setUpdatedFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
+    const [departmentId, setDepartmentId] = useState("");
 
+    const [departmentList, setDepartmentList] = useState([]);
+    useEffect(() => {
+        getAllDepartments().then((response) => {
+            console.log("---departments---", response.data);
+            setDepartmentList(response.data);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }, []);
 
     //for holding each field validation message
     const [currentErrorMessages, setUpdatedErrorMessages] = useState({
         errorFirstNameMsg: '',
         errorLastNameMsg: '',
-        errorEmailMsg: ''
+        errorEmailMsg: '',
+        errorDepartmentMsg: ''
     });
 
     const validateFormData = () => {
@@ -46,6 +58,13 @@ const CreateEmployeeComponent = () => {
             isValid = false;
         }
 
+        if (departmentId) {
+            errorMessagesCopy.errorDepartmentMsg = "";
+        } else {
+            errorMessagesCopy.errorDepartmentMsg = "Department is required";
+            isValid = false;
+        }
+
         setUpdatedErrorMessages(errorMessagesCopy);
         return isValid;
     }
@@ -57,7 +76,7 @@ const CreateEmployeeComponent = () => {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         if (validateFormData()) {
-            const employee = { firstName: currentFirstName, lastName, email };
+            const employee = { firstName: currentFirstName, lastName, email, departmentId };
             console.log("employee data from form:", employee);
 
             if (id) {
@@ -98,14 +117,15 @@ const CreateEmployeeComponent = () => {
     }
 
     useEffect(() => {
-        console.log("Employee id:", id);
         if (id) {
+            console.log("Employee id to be updated:", id);
             getEmployee(id)
                 .then((response) => {
-                    console.log(response);
+                    console.log("---getEmployee---", response);
                     setUpdatedFirstName(response.data.firstName);
                     setLastName(response.data.lastName);
                     setEmail(response.data.email);
+                    setDepartmentId(response.data.departmentId);
                 }).catch((error) => {
                     console.log(error);
                 });
@@ -122,8 +142,9 @@ const CreateEmployeeComponent = () => {
                     <div className="card-body">
                         <form>
                             <div className="form-group mb-2">
-                                <label className='form-label'>First Name:</label>
+                                <label className='form-label' htmlFor="firstNameId">First Name:</label>
                                 <input
+                                    id="firstNameId"
                                     type='text'
                                     placeholder='Enter employee first name'
                                     name='firstName'
@@ -135,8 +156,9 @@ const CreateEmployeeComponent = () => {
                             </div>
 
                             <div className="form-group mb-2">
-                                <label className='form-label'>Last Name:</label>
+                                <label className='form-label' htmlFor="lastNameId">Last Name:</label>
                                 <input
+                                    id="lastNameId"
                                     type='text'
                                     placeholder='Enter employee last name'
                                     name='lastName'
@@ -148,9 +170,10 @@ const CreateEmployeeComponent = () => {
                             </div>
 
                             <div className="form-group mb-2">
-                                <label className='form-label'>Email Id:</label>
+                                <label className='form-label' htmlFor="emailId">Email Id:</label>
                                 <input
-                                    type='email'
+                                    id="emailId"
+                                    type='text'
                                     placeholder='Enter a valid email id'
                                     name='email'
                                     value={email}
@@ -158,6 +181,29 @@ const CreateEmployeeComponent = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                                 {currentErrorMessages.errorEmailMsg && <div className='invalid-feedback'>{currentErrorMessages.errorEmailMsg}</div>}
+                            </div>
+
+                            <div className="form-group mb-2">
+                                <label className='form-label' htmlFor='departmentId'>Select Department:</label>
+                                <select
+                                    id="departmentId"
+                                    name="departmentId"
+                                    className={`form-select ${currentErrorMessages.errorDepartmentMsg ? 'is-invalid' : ''}`}
+                                    value={departmentId}
+                                    onChange={(e) => setDepartmentId(e.target.value)}>
+                                    <option value="Select department">Open this select menu:</option>
+                                    {
+                                        departmentList.map(eachDepartment =>
+                                            <option key={eachDepartment.id} value={eachDepartment.id}>
+                                                {eachDepartment.departmentName}
+                                            </option>
+                                        )
+                                    }
+                                </select>
+                                {
+                                    currentErrorMessages.errorDepartmentMsg &&
+                                    <div className='invalid-feedback'>{currentErrorMessages.errorDepartmentMsg}</div>
+                                }
                             </div>
 
                             <button
@@ -174,4 +220,4 @@ const CreateEmployeeComponent = () => {
     )
 }
 
-export default CreateEmployeeComponent
+export default EmployeeComponent

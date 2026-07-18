@@ -46,6 +46,10 @@ const ListDepartmentComponent = () => {
 
     }
 
+    const editDepartment = (departmentId) => {
+        navigator(`/edit-department/${departmentId}`);
+    }
+
     return (
         <div className='container my-2'>
             <div className="row">
@@ -74,7 +78,8 @@ const ListDepartmentComponent = () => {
                                                 <td>{eachDepartment.departmentDescription}</td>
                                                 <td>
                                                     <button
-                                                        className="btn btn-sm btn-outline-warning">Edit</button>
+                                                        className="btn btn-sm btn-outline-warning"
+                                                        onClick={() => editDepartment(eachDepartment.id)}>Edit</button>
                                                 </td>
                                                 <td>
                                                     <button
