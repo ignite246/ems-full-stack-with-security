@@ -9,33 +9,35 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="app-container">
+
         <HeaderComponent />
-        <Routes>
-          {/*http://localhost:3000 */}
-          <Route path='/' element={<ListEmployeeComponent />} />
 
-          {/*http://localhost:3000/employees */}
-          <Route path='/employees' element={<ListEmployeeComponent />} />
+        <main className="main-content">
+          <Routes>
 
-          {/*http://localhost:3000/add-employee */}
-          <Route path='/add-employee' element={<EmployeeComponent />} />
+            <Route path='/' element={<ListEmployeeComponent />} />
 
-          {/*http://localhost:3000/update-employee/12 */}
-          <Route path='/update-employee/:id' element={<EmployeeComponent />} />
+            <Route path='/employees' element={<ListEmployeeComponent />} />
 
-          <Route path='/departments' element={<ListDepartmentComponent />} />
+            <Route path='/add-employee' element={<EmployeeComponent />} />
 
-          <Route path='/add-department' element={<DepartmentComponent />} />
+            <Route path='/update-employee/:id' element={<EmployeeComponent />} />
 
-          <Route path='/edit-department/:id' element={<DepartmentComponent />} />
+            <Route path='/departments' element={<ListDepartmentComponent />} />
 
+            <Route path='/add-department' element={<DepartmentComponent />} />
 
-        </Routes>
+            <Route path='/edit-department/:id' element={<DepartmentComponent />} />
+
+          </Routes>
+        </main>
+
         <FooterComponent />
-      </BrowserRouter>
-    </>
+
+      </div>
+    </BrowserRouter>
   )
 }
 

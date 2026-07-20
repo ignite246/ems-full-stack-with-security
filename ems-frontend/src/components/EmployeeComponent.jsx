@@ -91,9 +91,21 @@ const EmployeeComponent = () => {
             } else {
                 createEmployee(employee).then((apiResponse) => {
                     console.log("Create Employee API Response:", apiResponse);
+                    Swal.fire({
+                        title: 'Success!',
+                        text: `${apiResponse.status + apiResponse.statusText}`,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    })
                     navigator("/employees");
                 }).catch((error) => {
-                    console.log("Something went wrong while creating an employee:", error);
+                    console.log("Something went wrong while creating an employee:", error.response);
+                    Swal.fire({
+                        title: 'Failure!',
+                        text: `${error.response.data.message}`,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })
                 });
             }
         }

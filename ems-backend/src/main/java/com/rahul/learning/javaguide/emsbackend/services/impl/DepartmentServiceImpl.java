@@ -2,14 +2,17 @@ package com.rahul.learning.javaguide.emsbackend.services.impl;
 
 import com.rahul.learning.javaguide.emsbackend.dtos.DepartmentDTO;
 import com.rahul.learning.javaguide.emsbackend.entities.Department;
+import com.rahul.learning.javaguide.emsbackend.exceptions.DepartmentDeletionException;
 import com.rahul.learning.javaguide.emsbackend.exceptions.ResourceNotFoundException;
 import com.rahul.learning.javaguide.emsbackend.mappers.DepartmentMapper;
 import com.rahul.learning.javaguide.emsbackend.repos.DepartmentRepository;
+import com.rahul.learning.javaguide.emsbackend.repos.EmployeeRepository;
 import com.rahul.learning.javaguide.emsbackend.services.DepartmentService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Service
@@ -18,6 +21,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @NonNull
     private final DepartmentRepository departmentRepository;
+    @NonNull
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public DepartmentDTO createDepartment(DepartmentDTO departmentDTO) {
@@ -41,7 +46,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public void deleteDepartmentById(Long id) {
-        departmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Department not found with id=" + id));
+        departmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id=" + id));
+
+        if(employeeRepository.existsByDepartmentId(id)){
+            throw new DepartmentDeletionException(
+                    "Department cannot be deleted because employees are assigned to it.");
+        }
         departmentRepository.deleteById(id);
     }
 

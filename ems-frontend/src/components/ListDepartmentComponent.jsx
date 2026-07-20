@@ -41,7 +41,13 @@ const ListDepartmentComponent = () => {
             });
             fetchAllDepartments();
         }).catch((error) => {
-            console.log(error);
+            console.log(error.response.data);
+            Swal.fire({
+                title: 'Failure!',
+                text: `${error.response.data.message}`,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            })
         })
 
     }
@@ -53,7 +59,7 @@ const ListDepartmentComponent = () => {
     return (
         <div className='container my-2'>
             <div className="row">
-                <div className="col-lg-6 offset-lg-3">
+                <div className="col-lg-8 offset-lg-2">
                     <div className="card border-3 border-success container-fluid p-0">
                         <div className="card-header text-center text-bg-success">
                             <h3>List of Departments</h3>
@@ -66,6 +72,7 @@ const ListDepartmentComponent = () => {
                                         <th>Department Id</th>
                                         <th>Name</th>
                                         <th>Description</th>
+                                        <th>Employee Count</th>
                                         <th colSpan={2}>Actions</th>
                                     </tr>
                                 </thead>
@@ -76,6 +83,7 @@ const ListDepartmentComponent = () => {
                                                 <td>{eachDepartment.id}</td>
                                                 <td>{eachDepartment.departmentName}</td>
                                                 <td>{eachDepartment.departmentDescription}</td>
+                                                <td>Not Available</td>
                                                 <td>
                                                     <button
                                                         className="btn btn-sm btn-outline-warning"

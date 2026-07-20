@@ -3,6 +3,7 @@ package com.rahul.learning.javaguide.emsbackend.services.impl;
 import com.rahul.learning.javaguide.emsbackend.dtos.EmployeeDTO;
 import com.rahul.learning.javaguide.emsbackend.entities.Department;
 import com.rahul.learning.javaguide.emsbackend.entities.Employee;
+import com.rahul.learning.javaguide.emsbackend.exceptions.EmployeeCreationException;
 import com.rahul.learning.javaguide.emsbackend.exceptions.ResourceNotFoundException;
 import com.rahul.learning.javaguide.emsbackend.mappers.EmployeeMapper;
 import com.rahul.learning.javaguide.emsbackend.repos.DepartmentRepository;
@@ -24,7 +25,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
         final Employee employee = EmployeeMapper.mapToEmployee(employeeDTO);
 
-        Department departmentFound =  departmentRepository.findById(employeeDTO.getDepartmentId()).orElseThrow(() -> new ResourceNotFoundException("Department not found with id=" + employeeDTO.getDepartmentId()));
+        //Check if email already exist
+        if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
+            throw new EmployeeCreationException(
+                    String.format(
+                            "Employee cannot be created because email '%s' already exists.",
+                            employeeDTO.getEmail()
+                    )
+            );
+        }
+
+        //Find the department and set it onto employee or throw exception if not found
+        Department departmentFound = departmentRepository.findById(employeeDTO.getDepartmentId())
+                .orElseThrow(() -> new EmployeeCreationException(
+                        String.format("Employee cannot be created because department with id: '%s' not found.",
+                                employeeDTO.getDepartmentId())
+                ));
+
         employee.setDepartment(departmentFound);
 
         final Employee savedEmployee = employeeRepository.save(employee);
@@ -51,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         final Employee existingEmployee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee does not exist with given id : " + employeeId));
 
-        Department departmentFound =  departmentRepository.findById(updatedEmployeeDTO.getDepartmentId()).orElseThrow(() -> new ResourceNotFoundException("Department not found with id=" + updatedEmployeeDTO.getDepartmentId()));
+        Department departmentFound = departmentRepository.findById(updatedEmployeeDTO.getDepartmentId()).orElseThrow(() -> new ResourceNotFoundException("Department not found with id=" + updatedEmployeeDTO.getDepartmentId()));
 
         existingEmployee.setDepartment(departmentFound);
         existingEmployee.setFirstName(updatedEmployeeDTO.getFirstName());

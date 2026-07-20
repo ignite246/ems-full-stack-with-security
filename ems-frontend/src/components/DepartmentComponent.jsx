@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { createDepartment, getDepartmentById, updateDepartment } from '../services/DepartmentService';
 import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const DepartmentComponent = () => {
 
@@ -49,6 +50,12 @@ const DepartmentComponent = () => {
                         navigator("/departments");
                     }).catch((error) => {
                         console.log(error);
+                        Swal.fire({
+                            title: 'Failure!',
+                            text: `${error.response.data.message}`,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        })
                     });
             }
         }

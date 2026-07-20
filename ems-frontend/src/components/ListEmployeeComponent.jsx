@@ -41,7 +41,7 @@ const ListEmployeeComponent = () => {
             console.log(response.data);
             getAllEmployees();
         }).catch((error) => {
-            console.log(error);
+            console.log(error.response.error);
         });
     }
 
@@ -53,7 +53,7 @@ const ListEmployeeComponent = () => {
                         <h3>List of Employees</h3>
                     </div>
                     <div className="card-body p-0">
-                        <button className='btn btn-sm m-2 bg-primary-subtle' onClick={addNewEmployee}>Add Employee</button>
+                        <button className='btn btn-sm btn-primary m-2' onClick={addNewEmployee}>Add Employee</button>
                         <table className='table table-striped table-bordered table-responsive'>
                             <thead>
                                 <tr>
