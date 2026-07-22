@@ -1,23 +1,30 @@
 package com.rahul.learning.javaguide.emsbackend.configs;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+@RequiredArgsConstructor
 @Log4j2
 @Configuration
 public class SpringSecurityConfig {
+
+    private final UserDetailsService userDetailsService;
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) {
+        return configuration.getAuthenticationManager();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
@@ -49,6 +56,7 @@ public class SpringSecurityConfig {
         return httpSecurity.build();
     }
 
+    /*
     @Bean
     public UserDetailsService userDetailsService() {
         final UserDetails userDetails1 = User.withUsername("user")
@@ -66,6 +74,7 @@ public class SpringSecurityConfig {
 
         return userDetailsService;
     }
+     */
 
     @Bean
     public PasswordEncoder passwordEncoder() {
