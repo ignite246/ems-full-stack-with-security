@@ -7,6 +7,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import tools.jackson.databind.ObjectMapper;
 
@@ -38,6 +40,10 @@ public class EmployeeController {
 
     @GetMapping
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            log.info("Authenticated user name: {}", authentication.getName());
+        }
         List<EmployeeDTO> employeeDTOs = employeeService.getAllEmployees();
         return new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
     }
