@@ -21,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SpringSecurityConfig {
 
     private final UserDetailsService userDetailsService;
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) {
         return configuration.getAuthenticationManager();
@@ -49,6 +50,8 @@ public class SpringSecurityConfig {
                         // Only ADMIN can delete
                         .requestMatchers(HttpMethod.DELETE, "/api/employees/**")
                         .hasRole("ADMIN")
+
+                        .requestMatchers("/api/auth/**").permitAll()
 
                         .anyRequest().authenticated()
                 );

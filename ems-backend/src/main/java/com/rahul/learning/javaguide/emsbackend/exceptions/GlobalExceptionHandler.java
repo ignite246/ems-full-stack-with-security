@@ -12,27 +12,39 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(DepartmentDeletionException.class)
-    public ResponseEntity<ErrorResponseDTO> handleDepartmentDeletionException(DepartmentDeletionException ex, HttpServletRequest request) {
-        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
-                LocalDateTime.now(),
-                HttpStatus.CONFLICT.value(),
-                HttpStatus.CONFLICT.getReasonPhrase(),
-                ex.getMessage(),
-                request.getRequestURI()
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    @ExceptionHandler({
+            DepartmentDeletionException.class,
+            EmployeeCreationException.class
+    })
+    public ResponseEntity<ErrorResponseDTO> handleConflictExceptions(
+            RuntimeException ex,
+            HttpServletRequest request) {
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(buildErrorResponse(
+                        HttpStatus.CONFLICT,
+                        ex.getMessage(),
+                        request
+                ));
     }
 
-    @ExceptionHandler(EmployeeCreationException.class)
-    public ResponseEntity<ErrorResponseDTO> handleEmployeeCreationException(EmployeeCreationException ex, HttpServletRequest request) {
-        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
+    @ExceptionHandler(UserRegistrationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUserRegistrationException(UserRegistrationException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(buildErrorResponse(
+                        HttpStatus.BAD_REQUEST,
+                        ex.getMessage(),
+                        request
+                ));
+    }
+
+    private ErrorResponseDTO buildErrorResponse(HttpStatus httpStatus, String errorMessage, HttpServletRequest request) {
+        return new ErrorResponseDTO(
                 LocalDateTime.now(),
-                HttpStatus.CONFLICT.value(),
-                HttpStatus.CONFLICT.getReasonPhrase(),
-                ex.getMessage(),
+                httpStatus.value(),
+                httpStatus.getReasonPhrase(),
+                errorMessage,
                 request.getRequestURI()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 }
