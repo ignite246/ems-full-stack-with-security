@@ -4,6 +4,7 @@ import com.rahul.learning.javaguide.emsbackend.dtos.ErrorResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,10 +17,7 @@ public class GlobalExceptionHandler {
             DepartmentDeletionException.class,
             EmployeeCreationException.class
     })
-    public ResponseEntity<ErrorResponseDTO> handleConflictExceptions(
-            RuntimeException ex,
-            HttpServletRequest request) {
-
+    public ResponseEntity<ErrorResponseDTO> handleConflictExceptions(RuntimeException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(buildErrorResponse(
                         HttpStatus.CONFLICT,
@@ -33,6 +31,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(buildErrorResponse(
                         HttpStatus.BAD_REQUEST,
+                        ex.getMessage(),
+                        request
+                ));
+    }
+
+    @ExceptionHandler(UserLoginFailedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUserLoginFailedException(UserLoginFailedException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(buildErrorResponse(
+                        HttpStatus.UNAUTHORIZED,
                         ex.getMessage(),
                         request
                 ));

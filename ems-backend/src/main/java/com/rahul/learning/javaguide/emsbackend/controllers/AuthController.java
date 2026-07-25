@@ -1,5 +1,6 @@
 package com.rahul.learning.javaguide.emsbackend.controllers;
 
+import com.rahul.learning.javaguide.emsbackend.dtos.LoginDTO;
 import com.rahul.learning.javaguide.emsbackend.dtos.RegisterDTO;
 import com.rahul.learning.javaguide.emsbackend.records.SuccessResponseDTO;
 import com.rahul.learning.javaguide.emsbackend.services.AuthService;
@@ -27,5 +28,14 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new SuccessResponseDTO(response));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<SuccessResponseDTO> login(@RequestBody LoginDTO loginDTO) {
+        log.info("Login request received={}", loginDTO);
+        final String loginResponse = authService.login(loginDTO);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new SuccessResponseDTO(loginResponse));
     }
 }
