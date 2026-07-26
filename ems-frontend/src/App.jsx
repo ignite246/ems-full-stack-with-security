@@ -6,6 +6,8 @@ import ListDepartmentComponent from './components/ListDepartmentComponent'
 import ListEmployeeComponent from './components/ListEmployeeComponent'
 import DepartmentComponent from './components/DepartmentComponent'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import RegisterComponent from './components/RegisterComponent'
+import LoginComponent from './components/LoginComponent'
 
 function App() {
   return (
@@ -30,6 +32,10 @@ function App() {
             <Route path='/add-department' element={<DepartmentComponent />} />
 
             <Route path='/edit-department/:id' element={<DepartmentComponent />} />
+
+            <Route path='/register' element={<RegisterComponent />} />
+
+            <Route path='/login' element={<LoginComponent />} />
 
           </Routes>
         </main>

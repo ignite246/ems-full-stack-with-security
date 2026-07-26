@@ -1,13 +1,13 @@
 package com.rahul.learning.javaguide.emsbackend.dtos;
 
-import lombok.*;
+import jakarta.validation.constraints.NotBlank;
 
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class LoginDTO {
-    private String usernameOrEmail;
-    private String password;
+public record LoginDTO(
+
+        @NotBlank(message = "Username or Email cannot be blank")
+        String usernameOrEmail,
+
+        @NotBlank(message = "Password is required")
+        String password
+) {
 }

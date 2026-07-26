@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Setter
 @Getter
@@ -17,4 +18,5 @@ public class ErrorResponseDTO {
     private String error;
     private String message;
     private String path;
+    private Map<String, String> validationErrors;
 }

@@ -1,4 +1,4 @@
-package com.rahul.learning.javaguide.emsbackend.records;
+package com.rahul.learning.javaguide.emsbackend.dtos;
 
 /*
  * What is a Record?

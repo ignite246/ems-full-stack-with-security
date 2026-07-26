@@ -5,18 +5,52 @@ const HeaderComponent = () => {
     return (
         <div>
             <header>
-                <nav className='navbar navbar-dark bg-dark navbar-expand-lg'>
-                    <a className='navbar-brand' href="https://ignite246.github.io/">Employee Management System</a>
+                <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+
+                    <NavLink className="navbar-brand" to="/">
+                        Employee Management System
+                    </NavLink>
+
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav">
+                        <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
-                                <NavLink to='/employees' className='nav-link'>Employees</NavLink>
+                                <NavLink to="/employees" className="nav-link">
+                                    Employees
+                                </NavLink>
                             </li>
+
                             <li className="nav-item">
-                                <NavLink to='/departments' className='nav-link'>Departments</NavLink>
+                                <NavLink to="/departments" className="nav-link">
+                                    Departments
+                                </NavLink>
+                            </li>
+
+                            <li className="nav-item">
+                                <NavLink to="/register" className="nav-link">
+                                    Register
+                                </NavLink>
+                            </li>
+
+                            <li className="nav-item">
+                                <NavLink to="/login" className="nav-link">
+                                    Login
+                                </NavLink>
                             </li>
                         </ul>
                     </div>
+
                 </nav>
             </header>
         </div>

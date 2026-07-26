@@ -70,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String login(LoginDTO loginDTO) {
         try {
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword());
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginDTO.usernameOrEmail(), loginDTO.password());
 
             Authentication authentication = authenticationManager.authenticate(token);
 
