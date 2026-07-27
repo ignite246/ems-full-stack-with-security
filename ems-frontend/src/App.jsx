@@ -19,7 +19,7 @@ function App() {
         <main className="main-content">
           <Routes>
 
-            <Route path='/' element={<ListEmployeeComponent />} />
+            <Route path='/' element={<LoginComponent />} />
 
             <Route path='/employees' element={<ListEmployeeComponent />} />
 

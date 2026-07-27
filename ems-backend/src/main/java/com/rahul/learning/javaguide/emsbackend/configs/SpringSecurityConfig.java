@@ -51,7 +51,11 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/employees/**")
                         .hasRole("ADMIN")
 
+                        // Accessible to all (login and register APIs)
                         .requestMatchers("/api/auth/**").permitAll()
+
+                        // Preflight API
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         .anyRequest().authenticated()
                 );
