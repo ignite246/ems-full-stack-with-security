@@ -219,12 +219,9 @@ const EmployeeComponent = () => {
                             </div>
 
                             <button
-                                className="btn btn-success"
+                                className="btn btn-primary"
                                 onClick={handleFormSubmit}>Submit</button>
                         </form>
-                    </div>
-                    <div className="card-footer">
-                        <h2 className='bg-dark text-white'>Footer of the form</h2>
                     </div>
                 </div>
             </div>

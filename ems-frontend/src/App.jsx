@@ -5,11 +5,14 @@ import HeaderComponent from './components/HeaderComponent'
 import ListDepartmentComponent from './components/ListDepartmentComponent'
 import ListEmployeeComponent from './components/ListEmployeeComponent'
 import DepartmentComponent from './components/DepartmentComponent'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import RegisterComponent from './components/RegisterComponent'
 import LoginComponent from './components/LoginComponent'
+import { isUserLoggedIn } from './services/AuthService'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
+
   return (
     <BrowserRouter>
       <div className="app-container">
@@ -21,17 +24,41 @@ function App() {
 
             <Route path='/' element={<LoginComponent />} />
 
-            <Route path='/employees' element={<ListEmployeeComponent />} />
+            <Route path='/employees' element={
+              <ProtectedRoute>
+                <ListEmployeeComponent />
+              </ProtectedRoute>
+            } />
 
-            <Route path='/add-employee' element={<EmployeeComponent />} />
+            <Route path='/add-employee' element={
+              <ProtectedRoute>
+                <EmployeeComponent />
+              </ProtectedRoute>
+            } />
 
-            <Route path='/update-employee/:id' element={<EmployeeComponent />} />
+            <Route path='/update-employee/:id' element={
+              <ProtectedRoute>
+                <EmployeeComponent />
+              </ProtectedRoute>
+            } />
 
-            <Route path='/departments' element={<ListDepartmentComponent />} />
+            <Route path='/departments' element={
+              <ProtectedRoute>
+                <ListDepartmentComponent />
+              </ProtectedRoute>
+            } />
 
-            <Route path='/add-department' element={<DepartmentComponent />} />
+            <Route path='/add-department' element={
+              <ProtectedRoute>
+                <DepartmentComponent />
+              </ProtectedRoute>
+            } />
 
-            <Route path='/edit-department/:id' element={<DepartmentComponent />} />
+            <Route path='/edit-department/:id' element={
+              <ProtectedRoute>
+                <DepartmentComponent />
+              </ProtectedRoute>
+            } />
 
             <Route path='/register' element={<RegisterComponent />} />
 

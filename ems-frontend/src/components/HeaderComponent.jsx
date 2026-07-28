@@ -71,7 +71,7 @@ const HeaderComponent = () => {
                             {
                                 isAuth && <li className="nav-item">
                                     <button
-                                        className="nav-link btn btn-link text-white"
+                                        className="nav-link"
                                         onClick={handleLogout}
                                     >
                                         Logout
