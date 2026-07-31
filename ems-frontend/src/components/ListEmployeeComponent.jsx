@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { listEmployees, deleteEmployee } from '../services/EmployeeService';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const ListEmployeeComponent = () => {
 
@@ -36,14 +37,42 @@ const ListEmployeeComponent = () => {
     }
 
     const removeEmployee = (id) => {
+
         console.log("employee to be deleted with id:", id);
-        deleteEmployee(id).then((response) => {
-            console.log(response.data);
-            getAllEmployees();
-        }).catch((error) => {
-            console.log(error.response.error);
-        });
-    }
+
+        deleteEmployee(id)
+            .then((response) => {
+
+                console.log(response.data);
+                getAllEmployees();
+
+            })
+            .catch((error) => {
+                if (error.response) {
+                    Swal.fire({
+                        icon: "error",
+                        title: `${error.response.data.status} ${error.response.data.error}`,
+                        text: error.response.data.message
+                    });
+
+                } else if (error.request) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Service Temporarily Unavailable",
+                        text: "We're unable to connect to the server right now. Please try again in a few moments. If the problem persists, contact your administrator."
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Unexpected Error",
+                        text: error.message
+                    });
+
+                }
+
+            });
+
+    };
 
     return (
         <div className='container-fluid my-2'>

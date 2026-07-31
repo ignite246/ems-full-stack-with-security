@@ -1,9 +1,6 @@
 package com.rahul.learning.javaguide.emsbackend.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -12,6 +9,7 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 @ToString
+@Builder
 public class ErrorResponseDTO {
     private LocalDateTime timestamp;
     private int status;

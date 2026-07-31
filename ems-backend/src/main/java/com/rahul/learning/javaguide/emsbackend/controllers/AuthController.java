@@ -1,5 +1,6 @@
 package com.rahul.learning.javaguide.emsbackend.controllers;
 
+import com.rahul.learning.javaguide.emsbackend.dtos.JwtAuthResponseDTO;
 import com.rahul.learning.javaguide.emsbackend.dtos.LoginDTO;
 import com.rahul.learning.javaguide.emsbackend.dtos.RegisterDTO;
 import com.rahul.learning.javaguide.emsbackend.dtos.SuccessResponseDTO;
@@ -11,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("*")
+
 @Log4j2
 @RequiredArgsConstructor
 @RestController
@@ -30,11 +31,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<SuccessResponseDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<JwtAuthResponseDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
         log.info("Login request received={}", loginDTO);
-        final String loginResponse = authService.login(loginDTO);
+        final String token = authService.login(loginDTO);
+
+        JwtAuthResponseDTO jwtAuthResponse = new JwtAuthResponseDTO();
+        jwtAuthResponse.setAccessToken(token);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new SuccessResponseDTO(loginResponse));
+                .body(jwtAuthResponse);
     }
 }

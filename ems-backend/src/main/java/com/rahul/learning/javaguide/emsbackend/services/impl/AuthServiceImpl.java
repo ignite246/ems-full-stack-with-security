@@ -8,6 +8,7 @@ import com.rahul.learning.javaguide.emsbackend.exceptions.UserLoginFailedExcepti
 import com.rahul.learning.javaguide.emsbackend.exceptions.UserRegistrationException;
 import com.rahul.learning.javaguide.emsbackend.repos.RoleRepository;
 import com.rahul.learning.javaguide.emsbackend.repos.UserRepository;
+import com.rahul.learning.javaguide.emsbackend.security.JwtTokenProvider;
 import com.rahul.learning.javaguide.emsbackend.services.AuthService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public String register(RegisterDTO registerDTO) {
@@ -70,9 +71,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String login(LoginDTO loginDTO) {
         try {
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginDTO.usernameOrEmail(), loginDTO.password());
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                    loginDTO.usernameOrEmail(), loginDTO.password());
 
-            Authentication authentication = authenticationManager.authenticate(token);
+            Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
             /**
              * Spring Security never returns an unauthenticated Authentication object.
@@ -80,11 +82,7 @@ public class AuthServiceImpl implements AuthService {
              * throws an exception.
              */
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            if (userDetails != null) {
-                log.info("User authentication successful={}", userDetails.getUsername());
-            }
-            return "User logged-in successfully";
+            return jwtTokenProvider.generateToken(authentication);
 
         } catch (AuthenticationException ex) {
             log.error("Authentication failed", ex);

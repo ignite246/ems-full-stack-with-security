@@ -21,7 +21,10 @@ const LoginComponent = () => {
 
 
                 // Step1: generating Basic auth token & setting into LocalStorage of the browser
-                const token = "Basic " + window.btoa(usernameOrEmail + ":" + password);
+                //const token = "Basic " + window.btoa(usernameOrEmail + ":" + password);
+
+                const token = "Bearer " + success.data.accessToken;
+
                 storeToken(token);
                 saveLoggedInUser(usernameOrEmail);
 
