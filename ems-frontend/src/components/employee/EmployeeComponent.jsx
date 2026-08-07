@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { createEmployee, getEmployee, updateEmployee } from '../services/EmployeeService'
+import { createEmployee, getEmployee, updateEmployee } from '../../services/EmployeeService'
 import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2';
-import { getAllDepartments } from '../services/DepartmentService';
+import { getAllDepartments } from '../../services/DepartmentService';
 
 const EmployeeComponent = () => {
 

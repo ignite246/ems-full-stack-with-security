@@ -1,16 +1,22 @@
 import axios from "axios";
 
-const AUTH_SERVICE_REST_API_BASE_URL = "http://localhost:8080/api/auth";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+console.log("AuthService::API_BASE_URL:", API_BASE_URL);
 
-export const registerUser = (registerObj) => axios.post(AUTH_SERVICE_REST_API_BASE_URL + "/register", registerObj);
+const AUTH_REST_API_BASE_URL = API_BASE_URL + "/auth";
 
-export const loginUser = (loginObj) => axios.post(AUTH_SERVICE_REST_API_BASE_URL + "/login", loginObj);
+export const registerUser = (registerObj) => axios.post(AUTH_REST_API_BASE_URL + "/register", registerObj);
 
-export const storeToken = (token) => localStorage.setItem("token", token);
+export const loginUser = (loginObj) => axios.post(AUTH_REST_API_BASE_URL + "/login", loginObj);
 
-export const getToken = () => localStorage.getItem("token");
+export const storeTokenInLocalStorage = (token) => localStorage.setItem("token", token);
 
-export const saveLoggedInUser = (usernameOrEmail) => sessionStorage.setItem("authenticatedUser", usernameOrEmail);
+export const getTokenFromLocalStorage = () => localStorage.getItem("token");
+
+export const saveLoggedInUserInSessionStorage = (usernameOrEmail, role) => {
+    sessionStorage.setItem("authenticatedUser", usernameOrEmail);
+    sessionStorage.setItem("role", role);
+}
 
 export const isUserLoggedIn = () => {
     const usernameOrEmail = sessionStorage.getItem("authenticatedUser");
@@ -31,4 +37,14 @@ export const logoutUser = () => {
     localStorage.clear();
     sessionStorage.clear();
     // window.location.reload(false);
+}
+
+export const isLoggedInUserAdmin = () => {
+    let role = sessionStorage.getItem("role");
+    if (role != null && role === "ROLE_ADMIN") {
+        return true;
+    }
+    else {
+        return false;
+    }
 }

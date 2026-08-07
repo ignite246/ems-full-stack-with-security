@@ -1,28 +1,25 @@
 import './App.css'
-import EmployeeComponent from './components/EmployeeComponent'
+import EmployeeComponent from './components/employee/EmployeeComponent'
 import FooterComponent from './components/FooterComponent'
 import HeaderComponent from './components/HeaderComponent'
-import ListDepartmentComponent from './components/ListDepartmentComponent'
-import ListEmployeeComponent from './components/ListEmployeeComponent'
-import DepartmentComponent from './components/DepartmentComponent'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import RegisterComponent from './components/RegisterComponent'
-import LoginComponent from './components/LoginComponent'
-import { isUserLoggedIn } from './services/AuthService'
+import ListDepartmentComponent from './components/department/ListDepartmentComponent'
+import ListEmployeeComponent from './components/employee/ListEmployeeComponent'
+import DepartmentComponent from './components/department/DepartmentComponent'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import RegisterComponent from './components/auth/RegisterComponent'
+import LoginComponent from './components/auth/LoginComponent'
 import ProtectedRoute from './components/ProtectedRoute'
+import PublicRoute from './components/PublicRoute'
+import AdminRoute from './components/AdminRoute'
+import PageNotFoundComponent from './components/PageNotFoundComponent'
 
 function App() {
 
   return (
-    <BrowserRouter>
       <div className="app-container">
-
         <HeaderComponent />
-
         <main className="main-content">
           <Routes>
-
-            <Route path='/' element={<LoginComponent />} />
 
             <Route path='/employees' element={
               <ProtectedRoute>
@@ -42,27 +39,49 @@ function App() {
               </ProtectedRoute>
             } />
 
-            <Route path='/departments' element={
-              <ProtectedRoute>
+            <Route path="/departments" element={
+              <AdminRoute>
                 <ListDepartmentComponent />
-              </ProtectedRoute>
-            } />
+              </AdminRoute>
+            }
+            />
 
-            <Route path='/add-department' element={
-              <ProtectedRoute>
+            <Route path="/add-department" element={
+              <AdminRoute>
                 <DepartmentComponent />
-              </ProtectedRoute>
-            } />
+              </AdminRoute>
+            }
+            />
 
-            <Route path='/edit-department/:id' element={
-              <ProtectedRoute>
+            <Route path="/edit-department/:id" element={
+              <AdminRoute>
                 <DepartmentComponent />
-              </ProtectedRoute>
-            } />
+              </AdminRoute>
+            }
+            />
 
-            <Route path='/register' element={<RegisterComponent />} />
+            <Route path="/" element={
+              <PublicRoute>
+                <LoginComponent />
+              </PublicRoute>
+            }
+            />
 
-            <Route path='/login' element={<LoginComponent />} />
+            <Route path="/login" element={
+              <PublicRoute>
+                <LoginComponent />
+              </PublicRoute>
+            }
+            />
+
+            <Route path="/register" element={
+              <PublicRoute>
+                <RegisterComponent />
+              </PublicRoute>
+            }
+            />
+
+            <Route path="*" element={<PageNotFoundComponent />} />
 
           </Routes>
         </main>
@@ -70,7 +89,6 @@ function App() {
         <FooterComponent />
 
       </div>
-    </BrowserRouter>
   )
 }
 

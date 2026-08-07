@@ -1,5 +1,6 @@
 package com.rahul.learning.javaguide.emsbackend.services.impl;
 
+import com.rahul.learning.javaguide.emsbackend.dtos.JwtAuthResponseDTO;
 import com.rahul.learning.javaguide.emsbackend.dtos.LoginDTO;
 import com.rahul.learning.javaguide.emsbackend.dtos.RegisterDTO;
 import com.rahul.learning.javaguide.emsbackend.entities.Role;
@@ -23,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Log4j2
@@ -69,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String login(LoginDTO loginDTO) {
+    public JwtAuthResponseDTO login(LoginDTO loginDTO) {
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     loginDTO.usernameOrEmail(), loginDTO.password());
@@ -82,8 +84,25 @@ public class AuthServiceImpl implements AuthService {
              * throws an exception.
              */
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return jwtTokenProvider.generateToken(authentication);
 
+            //Create token
+            final String accessToken = jwtTokenProvider.generateToken(authentication);
+
+            //Get the role
+            String roleName = null;
+            final Optional<User> loggedInUserOptional = userRepository.findByUsernameOrEmail(loginDTO.usernameOrEmail(), loginDTO.usernameOrEmail());
+            if (loggedInUserOptional.isPresent()) {
+                Optional<Role> optionalRole = loggedInUserOptional.get().getRoles().stream().findFirst();
+                if (optionalRole.isPresent()) {
+                    Role role = optionalRole.get();
+                    roleName = role.getName();
+                }
+            }
+            final JwtAuthResponseDTO jwtAuthResponseDTO = new JwtAuthResponseDTO();
+            jwtAuthResponseDTO.setAccessToken(accessToken);
+            jwtAuthResponseDTO.setRole(roleName);
+
+            return jwtAuthResponseDTO;
         } catch (AuthenticationException ex) {
             log.error("Authentication failed", ex);
             throw new UserLoginFailedException("Invalid username or password");

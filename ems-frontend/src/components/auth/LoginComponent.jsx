@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { loginUser, saveLoggedInUser, storeToken } from '../services/AuthService';
+import { loginUser, saveLoggedInUserInSessionStorage, storeTokenInLocalStorage } from '../../services/AuthService';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,20 +13,22 @@ const LoginComponent = () => {
 
     const handleUserLoginForm = async (e) => {
         e.preventDefault();
+
         const loginObj = { usernameOrEmail, password };
         console.log("loginObj", loginObj);
         await loginUser(loginObj)
-            .then((success) => {
-                console.log("login API response:", success.data);
+            .then((successResponse) => {
+                console.log("login API response:", successResponse.data);
 
 
                 // Step1: generating Basic auth token & setting into LocalStorage of the browser
                 //const token = "Basic " + window.btoa(usernameOrEmail + ":" + password);
 
-                const token = "Bearer " + success.data.accessToken;
+                const token = "Bearer " + successResponse.data.accessToken;
+                const role = successResponse.data.role;
 
-                storeToken(token);
-                saveLoggedInUser(usernameOrEmail);
+                storeTokenInLocalStorage(token);
+                saveLoggedInUserInSessionStorage(usernameOrEmail, role);
 
                 navigator("/employees");
 

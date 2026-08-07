@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { deleteDepartmentById, getAllDepartments } from '../services/DepartmentService';
+import { deleteDepartmentById, getAllDepartments } from '../../services/DepartmentService';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 

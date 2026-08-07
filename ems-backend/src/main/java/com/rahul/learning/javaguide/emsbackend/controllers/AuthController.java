@@ -33,13 +33,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<JwtAuthResponseDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
         log.info("Login request received={}", loginDTO);
-        final String token = authService.login(loginDTO);
-
-        JwtAuthResponseDTO jwtAuthResponse = new JwtAuthResponseDTO();
-        jwtAuthResponse.setAccessToken(token);
-
+        final JwtAuthResponseDTO jwtAuthResponseDTO = authService.login(loginDTO);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(jwtAuthResponse);
+                .body(jwtAuthResponseDTO);
     }
 }
