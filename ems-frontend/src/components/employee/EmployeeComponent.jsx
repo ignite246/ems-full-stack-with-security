@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { createEmployee, getEmployee, updateEmployee } from '../services/EmployeeService'
+import { createEmployee, getEmployee, updateEmployee } from '../../services/EmployeeService'
 import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2';
-import { getAllDepartments } from '../services/DepartmentService';
+import { getAllDepartments } from '../../services/DepartmentService';
 
 const EmployeeComponent = () => {
 
@@ -219,12 +219,9 @@ const EmployeeComponent = () => {
                             </div>
 
                             <button
-                                className="btn btn-success"
+                                className="btn btn-primary"
                                 onClick={handleFormSubmit}>Submit</button>
                         </form>
-                    </div>
-                    <div className="card-footer">
-                        <h2 className='bg-dark text-white'>Footer of the form</h2>
                     </div>
                 </div>
             </div>

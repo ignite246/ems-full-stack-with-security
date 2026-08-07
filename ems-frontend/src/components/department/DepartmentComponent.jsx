@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { createDepartment, getDepartmentById, updateDepartment } from '../services/DepartmentService';
+import { createDepartment, getDepartmentById, updateDepartment } from '../../services/DepartmentService';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -88,7 +88,7 @@ const DepartmentComponent = () => {
     return (
         <div className='container my-2'>
             <div className="row">
-                <div className="col-lg-8 offset-lg-2">
+                <div className="col-lg-6 offset-lg-3">
                     <div className="card border-3 border-danger-subtle">
                         <div className="card-header text-center bg-danger-subtle">
                             {operationName()}
@@ -127,7 +127,7 @@ const DepartmentComponent = () => {
                                     }
                                 </div>
                                 <button
-                                    className="btn btn-success"
+                                    className="btn btn-sm btn-danger"
                                     onClick={handleFormSubmit}>Submit</button>
                             </form>
                         </div>

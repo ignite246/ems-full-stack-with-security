@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { deleteDepartmentById, getAllDepartments } from '../services/DepartmentService';
+import { deleteDepartmentById, getAllDepartments } from '../../services/DepartmentService';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -60,12 +60,12 @@ const ListDepartmentComponent = () => {
         <div className='container my-2'>
             <div className="row">
                 <div className="col-lg-8 offset-lg-2">
-                    <div className="card border-3 border-success container-fluid p-0">
-                        <div className="card-header text-center text-bg-success">
+                    <div className="card border-3 border-danger container-fluid p-0">
+                        <div className="card-header text-center text-danger bg-black">
                             <h3>List of Departments</h3>
                         </div>
                         <div className="card-body p-0">
-                            <button className="btn btn-sm btn-success m-2" onClick={addNewDepartment}>Add Department</button>
+                            <button className="btn btn-sm btn-outline-danger m-3" onClick={addNewDepartment}>Add Department</button>
                             <table className='table table-striped table-bordered table-hover table-responsive'>
                                 <thead>
                                     <tr>
