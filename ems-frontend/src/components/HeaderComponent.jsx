@@ -61,6 +61,15 @@ const HeaderComponent = () => {
                             }
 
                             {
+                                isAuth &&
+                                <li className="nav-item">
+                                    <NavLink to="/health" className="nav-link">
+                                        Health Dashboard
+                                    </NavLink>
+                                </li>
+                            }
+
+                            {
                                 !isAuth &&
                                 <li className="nav-item">
                                     <NavLink to="/register" className="nav-link">

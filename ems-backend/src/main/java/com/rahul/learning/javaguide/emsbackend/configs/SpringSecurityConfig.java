@@ -114,6 +114,10 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/auth/**")
                         .permitAll()
 
+                        // Health & Metric endpoints are publicly accessible.
+                        .requestMatchers("/actuator/**")
+                        .permitAll()
+
                         /*
                          * CORS Preflight Requests
                          */
