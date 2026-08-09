@@ -10,6 +10,9 @@ import com.rahul.learning.javaguide.emsbackend.repos.DepartmentRepository;
 import com.rahul.learning.javaguide.emsbackend.repos.EmployeeRepository;
 import com.rahul.learning.javaguide.emsbackend.services.EmployeeService;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +24,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
     private DepartmentRepository departmentRepository;
 
+    @CacheEvict(value = "employeeList", allEntries = true)
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
         final Employee employee = EmployeeMapper.mapToEmployee(employeeDTO);
@@ -48,6 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return EmployeeMapper.mapToEmployeeDTO(savedEmployee);
     }
 
+    @Cacheable(value = "employees", key = "#employeeId")
     @Override
     public EmployeeDTO getEmployeeById(Long employeeId) {
         Employee empFound = employeeRepository.findById(employeeId)
@@ -57,12 +62,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         return EmployeeMapper.mapToEmployeeDTO(empFound);
     }
 
+    @Cacheable(value = "employeeList")
     @Override
     public List<EmployeeDTO> getAllEmployees() {
         final List<Employee> employees = employeeRepository.findAll();
         return employees.stream().map((EmployeeMapper::mapToEmployeeDTO)).toList();
     }
 
+    @CachePut(value = "employees", key = "#employeeId")
     @Override
     public EmployeeDTO updateEmployee(Long employeeId, EmployeeDTO updatedEmployeeDTO) {
         final Employee existingEmployee = employeeRepository.findById(employeeId)
@@ -79,6 +86,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return EmployeeMapper.mapToEmployeeDTO(updatedEmployee);
     }
 
+    @CacheEvict(value = "employees", allEntries = true)
     @Override
     public void deleteEmployeeById(Long employeeId) {
         employeeRepository.findById(employeeId)

@@ -4,6 +4,7 @@ import com.rahul.learning.javaguide.emsbackend.dtos.EmployeeDTO;
 import com.rahul.learning.javaguide.emsbackend.services.EmployeeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

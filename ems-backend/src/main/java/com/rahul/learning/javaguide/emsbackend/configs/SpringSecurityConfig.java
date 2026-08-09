@@ -128,6 +128,16 @@ public class SpringSecurityConfig {
                         .permitAll()
 
                         /*
+                         * Spring Boot error endpoint
+                         *
+                         * Allows exceptions from application endpoints to be handled
+                         * by the application's error handling mechanism instead of
+                         * being intercepted as an authentication failure.
+                         */
+                        .requestMatchers("/error")
+                        .permitAll()
+
+                        /*
                          * Any request not matched above must be authenticated.
                          */
                         .anyRequest()
