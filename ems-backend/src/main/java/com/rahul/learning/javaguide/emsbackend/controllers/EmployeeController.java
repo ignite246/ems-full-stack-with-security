@@ -41,11 +41,13 @@ public class EmployeeController {
 
     @GetMapping
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        log.info("STARTS::getAllEmployees");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             log.info("Authenticated user name: {}", authentication.getName());
         }
         List<EmployeeDTO> employeeDTOs = employeeService.getAllEmployees();
+        log.info("ENDS::getAllEmployees::employeeList={}", objectMapper.writeValueAsString(employeeDTOs));
         return new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
     }
 

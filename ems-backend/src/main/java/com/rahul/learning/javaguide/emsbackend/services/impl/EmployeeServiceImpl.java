@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,7 +70,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream().map((EmployeeMapper::mapToEmployeeDTO)).toList();
     }
 
-    @CachePut(value = "employees", key = "#employeeId")
+    @Caching(
+            put = @CachePut(value = "employees", key = "#employeeId"),
+            evict = @CacheEvict(value = "employeeList", allEntries = true)
+    )
     @Override
     public EmployeeDTO updateEmployee(Long employeeId, EmployeeDTO updatedEmployeeDTO) {
         final Employee existingEmployee = employeeRepository.findById(employeeId)
@@ -86,7 +90,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         return EmployeeMapper.mapToEmployeeDTO(updatedEmployee);
     }
 
-    @CacheEvict(value = "employees", allEntries = true)
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "employees", key = "#employeeId"),
+                    @CacheEvict(value = "employeeList", allEntries = true)
+            }
+    )
     @Override
     public void deleteEmployeeById(Long employeeId) {
         employeeRepository.findById(employeeId)
