@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
     private DepartmentRepository departmentRepository;
 
+    @Transactional
     @CacheEvict(value = "employeeList", allEntries = true)
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
@@ -70,6 +72,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream().map((EmployeeMapper::mapToEmployeeDTO)).toList();
     }
 
+    @Transactional
     @Caching(
             put = @CachePut(value = "employees", key = "#employeeId"),
             evict = @CacheEvict(value = "employeeList", allEntries = true)
@@ -90,6 +93,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return EmployeeMapper.mapToEmployeeDTO(updatedEmployee);
     }
 
+    @Transactional
     @Caching(
             evict = {
                     @CacheEvict(value = "employees", key = "#employeeId"),
