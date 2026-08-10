@@ -4,6 +4,7 @@ import com.rahul.learning.javaguide.emsbackend.dtos.EmployeeDTO;
 import com.rahul.learning.javaguide.emsbackend.services.EmployeeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +41,13 @@ public class EmployeeController {
 
     @GetMapping
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        log.info("STARTS::getAllEmployees");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             log.info("Authenticated user name: {}", authentication.getName());
         }
         List<EmployeeDTO> employeeDTOs = employeeService.getAllEmployees();
+        log.info("ENDS::getAllEmployees::employeeList={}", objectMapper.writeValueAsString(employeeDTOs));
         return new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
     }
 

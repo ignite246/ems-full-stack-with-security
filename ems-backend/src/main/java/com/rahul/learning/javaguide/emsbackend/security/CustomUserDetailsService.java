@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         final User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User does not exist with provided username or email " + usernameOrEmail));
 
-        log.info("loadUserByUsername::user from db={}", user);
+        //log.info("loadUserByUsername::user from db={}", user);
         Set<GrantedAuthority> grantedAuthorities = user.getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
