@@ -5,6 +5,7 @@ import com.rahul.learning.javaguide.emsbackend.dtos.LoginDTO;
 import com.rahul.learning.javaguide.emsbackend.dtos.RegisterDTO;
 import com.rahul.learning.javaguide.emsbackend.dtos.SuccessResponseDTO;
 import com.rahul.learning.javaguide.emsbackend.services.AuthService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -12,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+@Tag(name="Auth APIs", description = "Auth APIs for user login and register")
 @Log4j2
 @RequiredArgsConstructor
 @RestController
