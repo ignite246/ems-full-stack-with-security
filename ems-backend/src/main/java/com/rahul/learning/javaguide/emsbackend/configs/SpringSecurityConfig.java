@@ -119,6 +119,12 @@ public class SpringSecurityConfig {
                         .permitAll()
 
                         /*
+                         * Swagger / OpenAPI documentation
+                         */
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
+                        .permitAll()
+
+                        /*
                          * CORS Preflight Requests
                          */
 
