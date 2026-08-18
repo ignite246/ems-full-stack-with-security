@@ -43,10 +43,7 @@ public class EmployeeController {
     @SecuredApiResponses
     @NotFoundApiResponse
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@Parameter(
-            description = "Unique ID of the employee",
-            example = "25"
-    ) @PathVariable("id") Long employeeId) {
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@Parameter(description = "Unique ID of the employee", example = "25") @PathVariable("id") Long employeeId) {
         log.info("STARTS::getEmployeeById::employeeId={}", employeeId);
         EmployeeDTO employeeDTO = employeeService.getEmployeeById(employeeId);
         return new ResponseEntity<>(employeeDTO, HttpStatus.OK);

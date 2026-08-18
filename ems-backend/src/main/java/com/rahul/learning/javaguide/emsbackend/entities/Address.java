@@ -1,32 +1,37 @@
 package com.rahul.learning.javaguide.emsbackend.entities;
 
+import com.rahul.learning.javaguide.emsbackend.enums.AddressType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Setter
-@NoArgsConstructor
+@Getter
+@ToString
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "departments")
-public class Department {
-
+@Table(name = "addresses")
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long addressId;
 
-    @Column(name = "department_name")
-    private String departmentName;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "address_type", nullable = false)
+    private AddressType addressType;
 
-    @Column(name = "department_description")
-    private String departmentDescription;
+    @Column(nullable = false)
+    private String city;
+
+    @Column(nullable = false)
+    private String state;
+
+    @Column(nullable = false)
+    private String country;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
