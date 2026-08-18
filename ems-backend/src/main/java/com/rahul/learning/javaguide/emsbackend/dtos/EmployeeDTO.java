@@ -6,11 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Employee information")
+@Schema(description = "Employee Information")
 public class EmployeeDTO {
     private Long id;
 
@@ -25,4 +28,30 @@ public class EmployeeDTO {
 
     @Schema(description = "Employee's departmentId", example = "1")
     private Long departmentId;
+
+    @Schema(description = "Employee's officeId", example = "1")
+    private Long officeId;
+
+    @Schema(description = "Employee's list of experiences", example = """
+        [
+          {
+            "orgName": "TCS",
+            "dateOfJoining": "2020-07-01T09:00:00",
+            "dateOfLeaving": "2023-06-30T18:00:00"
+          },
+          {
+            "orgName": "Infosys",
+            "dateOfJoining": "2023-07-03T09:00:00",
+            "dateOfLeaving": null
+          }
+        ]
+        """
+    )
+    private List<ExperienceDTO> experiences;
+
+    @Schema(description = "Employee creation local date time", example = "10/02/2026 12:10:143")
+    private LocalDateTime createdAt;
+
+    @Schema(description = "Employee last update local date time", example = "10/02/2026 12:10:143")
+    private LocalDateTime updatedAt;
 }

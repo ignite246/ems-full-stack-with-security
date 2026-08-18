@@ -1,0 +1,21 @@
+package com.rahul.learning.javaguide.emsbackend.dtos;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Schema(description = "Employees' Experience Information")
+public class ExperienceDTO {
+    private Long expId;
+    private String orgName;
+    private LocalDateTime dateOfJoining;
+    private LocalDateTime dateOfLeaving;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+}

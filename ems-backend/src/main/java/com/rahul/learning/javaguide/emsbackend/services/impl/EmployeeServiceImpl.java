@@ -3,13 +3,17 @@ package com.rahul.learning.javaguide.emsbackend.services.impl;
 import com.rahul.learning.javaguide.emsbackend.dtos.EmployeeDTO;
 import com.rahul.learning.javaguide.emsbackend.entities.Department;
 import com.rahul.learning.javaguide.emsbackend.entities.Employee;
+import com.rahul.learning.javaguide.emsbackend.entities.Office;
 import com.rahul.learning.javaguide.emsbackend.exceptions.EmployeeCreationException;
 import com.rahul.learning.javaguide.emsbackend.exceptions.ResourceNotFoundException;
 import com.rahul.learning.javaguide.emsbackend.mappers.EmployeeMapper;
 import com.rahul.learning.javaguide.emsbackend.repos.DepartmentRepository;
 import com.rahul.learning.javaguide.emsbackend.repos.EmployeeRepository;
+import com.rahul.learning.javaguide.emsbackend.repos.OfficeRepository;
 import com.rahul.learning.javaguide.emsbackend.services.EmployeeService;
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,20 +23,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Log4j2
 @Service
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
     private DepartmentRepository departmentRepository;
+    private final OfficeRepository officeRepository;
 
     @Transactional
     @CacheEvict(value = "employeeList", allEntries = true)
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
+
         final Employee employee = EmployeeMapper.mapToEmployee(employeeDTO);
 
-        //Check if email already exist
+        // Check if email already exists
         if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
             throw new EmployeeCreationException(
                     String.format(
@@ -42,16 +49,40 @@ public class EmployeeServiceImpl implements EmployeeService {
             );
         }
 
-        //Find the department and set it onto employee or throw exception if not found
-        Department departmentFound = departmentRepository.findById(employeeDTO.getDepartmentId())
-                .orElseThrow(() -> new EmployeeCreationException(
-                        String.format("Employee cannot be created because department with id: '%s' not found.",
-                                employeeDTO.getDepartmentId())
-                ));
+        // Find department
+        Department departmentFound =
+                departmentRepository.findById(employeeDTO.getDepartmentId())
+                        .orElseThrow(() ->
+                                new EmployeeCreationException(
+                                        String.format(
+                                                "Employee cannot be created because department with id: '%s' not found.",
+                                                employeeDTO.getDepartmentId()
+                                        )
+                                )
+                        );
 
         employee.setDepartment(departmentFound);
 
+        // Find office
+        Office officeFound =
+                officeRepository.findById(employeeDTO.getOfficeId())
+                        .orElseThrow(() ->
+                                new EmployeeCreationException(
+                                        String.format(
+                                                "Employee cannot be created because office with id: '%s' not found.",
+                                                employeeDTO.getOfficeId()
+                                        )
+                                )
+                        );
+
+        employee.setOffice(officeFound);
+
+        /*
+         * CascadeType.ALL on Employee.experiences means
+         * Experience entities will also be persisted.
+         */
         final Employee savedEmployee = employeeRepository.save(employee);
+
         return EmployeeMapper.mapToEmployeeDTO(savedEmployee);
     }
 
@@ -69,6 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDTO> getAllEmployees() {
         final List<Employee> employees = employeeRepository.findAll();
+        log.info("getAllEmployees::employeesList={}", employees);
         return employees.stream().map((EmployeeMapper::mapToEmployeeDTO)).toList();
     }
 

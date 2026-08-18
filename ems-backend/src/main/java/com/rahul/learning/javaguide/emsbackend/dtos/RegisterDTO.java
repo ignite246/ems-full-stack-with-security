@@ -1,5 +1,6 @@
 package com.rahul.learning.javaguide.emsbackend.dtos;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -8,13 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Schema(description = "User Registration Information")
 public class RegisterDTO {
 
     @NotBlank(message = "name is required")
-    @Pattern(
-            regexp = "^[A-Za-z ]+$",
-            message = "Name should contain only alphabets"
-    )
+    @Pattern(regexp = "^[A-Za-z ]+$", message = "Name should contain only alphabets")
     private String name;
 
     @NotBlank(message = "Username is required")

@@ -106,6 +106,10 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/departments/**")
                         .hasRole("ADMIN")
 
+                        // All office operations are restricted to ADMIN users.
+                        .requestMatchers("/api/offices/**")
+                        .hasRole("ADMIN")
+
                         /*
                          * Authentication APIs
                          */
