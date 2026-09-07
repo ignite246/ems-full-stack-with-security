@@ -9,6 +9,7 @@ const ListEmployeeComponent = () => {
 
     const navigator = useNavigate();
     const [employees, setEmployees] = useState([]);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
 
     //1. Fetch all employees
     const getAllEmployees = () => {
@@ -74,13 +75,11 @@ const ListEmployeeComponent = () => {
     };
 
     //6. View full details of an employee
-    const viewEmployee = () => {
-        Swal.fire({
-            icon: "info",
-            title: "WIP",
-            text: "Feature coming soon..."
-        });
-    }
+    const viewEmployee = (id) => {
+        const employee = employees.find(employee => employee.id === id);
+
+        setSelectedEmployee(employee);
+    };
 
     // Check if loggedInUser is Admin or Not
     const isAdmin = isLoggedInUserAdmin();
@@ -135,6 +134,142 @@ const ListEmployeeComponent = () => {
                     </div>
                 </div>
 
+            </div>
+            <div className="row">
+                <div className="col-md-6 offset-md-3">
+                    {
+                        selectedEmployee && (
+                            <div
+                                className="modal fade show"
+                                style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+                                tabIndex="-1"
+                                role="dialog"
+                            >
+                                <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                                    <div className="modal-content">
+
+                                        <div className="modal-header bg-primary-subtle">
+                                            <h5 className="modal-title">
+                                                Employee Details
+                                            </h5>
+
+                                            <button
+                                                type="button"
+                                                className="btn-close"
+                                                onClick={() => setSelectedEmployee(null)}
+                                            ></button>
+                                        </div>
+
+                                        <div className="modal-body">
+
+                                            <div className="row mb-3">
+                                                <div className="col-md-6">
+                                                    <strong>Employee ID:</strong>
+                                                    <p>{selectedEmployee.id}</p>
+                                                </div>
+
+                                                <div className="col-md-6">
+                                                    <strong>Email:</strong>
+                                                    <p>{selectedEmployee.email}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="row mb-3">
+                                                <div className="col-md-6">
+                                                    <strong>First Name:</strong>
+                                                    <p>{selectedEmployee.firstName}</p>
+                                                </div>
+
+                                                <div className="col-md-6">
+                                                    <strong>Last Name:</strong>
+                                                    <p>{selectedEmployee.lastName}</p>
+                                                </div>
+                                            </div>
+
+                                             <div className="row mb-3">
+                                                <div className="col-md-6">
+                                                    <strong>Department Name:</strong>
+                                                    <p>{selectedEmployee.departmentName}</p>
+                                                </div>
+
+                                                <div className="col-md-6">
+                                                    <strong>Office Name:</strong>
+                                                    <p>{selectedEmployee.officeName}</p>
+                                                </div>
+                                            </div>
+
+                                            
+                                            <hr />
+
+                                            <h5 className="mb-3">Experience</h5>
+
+                                            {
+                                                selectedEmployee.experiences &&
+                                                    selectedEmployee.experiences.length > 0 ? (
+
+                                                    <div className="table-responsive">
+                                                        <table className="table table-bordered table-striped">
+                                                            <thead className="table-light">
+                                                                <tr>
+                                                                    <th>Organization</th>
+                                                                    <th>Date of Joining</th>
+                                                                    <th>Date of Leaving</th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody>
+                                                                {
+                                                                    selectedEmployee.experiences.map(experience => (
+                                                                        <tr key={experience.expId}>
+                                                                            <td>{experience.orgName}</td>
+                                                                            <td>{experience.dateOfJoining}</td>
+                                                                            <td>{experience.dateOfLeaving}</td>
+                                                                        </tr>
+                                                                    ))
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                ) : (
+                                                    <p className="text-muted">
+                                                        No experience information available.
+                                                    </p>
+                                                )
+                                            }
+
+                                            <hr />
+
+                                            <div className="row">
+                                                <div className="col-md-6">
+                                                    <strong>Created At:</strong>
+                                                    <p>{selectedEmployee.createdAt}</p>
+                                                </div>
+
+                                                <div className="col-md-6">
+                                                    <strong>Updated At:</strong>
+                                                    <p>{selectedEmployee.updatedAt}</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div className="modal-footer">
+                                            <button
+                                                type="button"
+                                                className="btn btn-secondary"
+                                                onClick={() => setSelectedEmployee(null)}
+                                            >
+                                                Close
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>
             </div>
         </div>
     )
