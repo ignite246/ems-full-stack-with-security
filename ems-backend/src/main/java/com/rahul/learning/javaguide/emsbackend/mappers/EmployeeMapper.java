@@ -23,8 +23,16 @@ public class EmployeeMapper {
                         ? employee.getDepartment().getId()
                         : null,
 
+                employee.getDepartment() != null
+                        ? employee.getDepartment().getDepartmentName()
+                        : null,
+
                 employee.getOffice() != null
                         ? employee.getOffice().getOfficeId()
+                        : null,
+
+                employee.getOffice() != null
+                        ? employee.getOffice().getName()
                         : null,
 
                 employee.getExperiences()

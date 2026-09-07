@@ -29,19 +29,25 @@ public class EmployeeDTO {
     @Schema(description = "Employee's departmentId", example = "1")
     private Long departmentId;
 
+    @Schema(description = "Employee's department name", example = "Human Resource")
+    private String departmentName;
+
     @Schema(description = "Employee's officeId", example = "1")
     private Long officeId;
+
+    @Schema(description = "Employee's office name", example = "Hyderabad Corporate Office")
+    private String officeName;
 
     @Schema(description = "Employee's list of experiences", example = """
         [
           {
             "orgName": "TCS",
-            "dateOfJoining": "2020-07-01T09:00:00",
-            "dateOfLeaving": "2023-06-30T18:00:00"
+            "dateOfJoining": "2020-07-01",
+            "dateOfLeaving": "2023-06-30"
           },
           {
             "orgName": "Infosys",
-            "dateOfJoining": "2023-07-03T09:00:00",
+            "dateOfJoining": "2023-07-03",
             "dateOfLeaving": null
           }
         ]

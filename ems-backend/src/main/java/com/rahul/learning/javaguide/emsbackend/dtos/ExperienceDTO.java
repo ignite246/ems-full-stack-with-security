@@ -3,6 +3,7 @@ package com.rahul.learning.javaguide.emsbackend.dtos;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -14,8 +15,8 @@ import java.time.LocalDateTime;
 public class ExperienceDTO {
     private Long expId;
     private String orgName;
-    private LocalDateTime dateOfJoining;
-    private LocalDateTime dateOfLeaving;
+    private LocalDate dateOfJoining;
+    private LocalDate dateOfLeaving;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -25,10 +26,10 @@ public class Experience {
     private String orgName;
 
     @Column(name = "date_of_joining", nullable = false)
-    private LocalDateTime dateOfJoining;
+    private LocalDate dateOfJoining;
 
     @Column(name = "date_of_leaving", nullable = false)
-    private LocalDateTime dateOfLeaving;
+    private LocalDate dateOfLeaving;
 
     /*
      * Experience is the owning side because it contains
