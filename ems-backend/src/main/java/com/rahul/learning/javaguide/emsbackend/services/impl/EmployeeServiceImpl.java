@@ -12,7 +12,6 @@ import com.rahul.learning.javaguide.emsbackend.repos.EmployeeRepository;
 import com.rahul.learning.javaguide.emsbackend.repos.OfficeRepository;
 import com.rahul.learning.javaguide.emsbackend.services.EmployeeService;
 import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -99,9 +98,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Cacheable(value = "employeeList")
     @Override
     public List<EmployeeDTO> getAllEmployees() {
-        final List<Employee> employees = employeeRepository.findAll();
-        log.info("getAllEmployees::employeesList={}", employees);
-        return employees.stream().map((EmployeeMapper::mapToEmployeeDTO)).toList();
+        final List<Employee> employees = employeeRepository.findAllWithDetails();
+        return employees.stream()
+                .map(EmployeeMapper::mapToEmployeeDTO)
+                .toList();
     }
 
     @Transactional
