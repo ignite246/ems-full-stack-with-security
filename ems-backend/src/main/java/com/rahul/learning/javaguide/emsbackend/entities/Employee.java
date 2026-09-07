@@ -44,7 +44,7 @@ public class Employee {
     // One employee can have multiple experiences
     // but, it will be managed by each Experience entity
     // mappedBy = "employee" : It refers to this field: private Employee employee; inside Experience
-    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Experience> experiences = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
