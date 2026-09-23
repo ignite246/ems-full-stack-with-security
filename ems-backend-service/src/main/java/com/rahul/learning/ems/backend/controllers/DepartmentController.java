@@ -11,8 +11,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/*
+ * CORS is intentionally not configured at the controller level.
+ * The API Gateway is the single browser-facing entry point and is responsible
+ * for CORS configuration. Keeping @CrossOrigin here would cause both the
+ * backend and Gateway to add Access-Control-Allow-Origin headers, resulting
+ * in duplicate CORS headers and browser rejection.
+ */
 @Tag(name = "Department APIs", description = "APIs for managing departments")
-@CrossOrigin("*")
 @Log4j2
 @RequiredArgsConstructor
 @RestController

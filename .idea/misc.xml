@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/ems-backend/pom.xml" />
         <option value="$PROJECT_DIR$/ems-notification-service/pom.xml" />
         <option value="$PROJECT_DIR$/ems-backend-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ems-api-gateway/pom.xml" />
       </list>
     </option>
   </component>
