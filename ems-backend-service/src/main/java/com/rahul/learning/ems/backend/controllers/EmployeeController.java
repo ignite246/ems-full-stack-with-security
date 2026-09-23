@@ -20,7 +20,6 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.List;
 
 @Tag(name = "Employee APIs", description = "APIs for managing employees")
-@CrossOrigin("*")
 @Log4j2
 @AllArgsConstructor
 @RestController

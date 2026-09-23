@@ -18,11 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -50,8 +45,8 @@ public class SpringSecurityConfig {
                  * CorsConfigurationSource bean defined below.
                  * This allows the React application (http://localhost:3000)
                  * to communicate with the Spring Boot backend.
+                 .cors(Customizer.withDefaults())  CORS is handled by the API Gateway.
                  */
-                .cors(Customizer.withDefaults())
 
                 /*
                  * Disables Cross-Site Request Forgery (CSRF) protection.
@@ -212,6 +207,7 @@ public class SpringSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /* This is not used as we've introduced API-Gateway as a single point of entry and react UI will communicate with it directly.
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
@@ -226,4 +222,5 @@ public class SpringSecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+     */
 }

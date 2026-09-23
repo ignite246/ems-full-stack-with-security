@@ -22,10 +22,17 @@
         </processorPath>
         <module name="ems-backend-service" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="EmsApiGateway" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="EmsApiGateway" options="-parameters" />
       <module name="ems-backend-service" options="-parameters" />
       <module name="ems-notification-service" options="-parameters" />
     </option>
