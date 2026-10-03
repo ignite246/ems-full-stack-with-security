@@ -59,7 +59,7 @@ const ListDepartmentComponent = () => {
     return (
         <div className='container my-2'>
             <div className="row">
-                <div className="col-lg-8 offset-lg-2">
+                <div className="col-lg-10 offset-lg-1">
                     <div className="card border-3 border-danger container-fluid p-0">
                         <div className="card-header text-center text-danger bg-black">
                             <h3>List of Departments</h3>

@@ -13,6 +13,7 @@ import PublicRoute from './components/PublicRoute'
 import AdminRoute from './components/AdminRoute'
 import PageNotFoundComponent from './components/PageNotFoundComponent'
 import HealthDashboardComponent from './components/HealthDashboardComponent'
+import ListOfficeComponent from './components/office/ListOfficeComponent'
 
 function App() {
 
@@ -43,6 +44,13 @@ function App() {
           <Route path="/departments" element={
             <AdminRoute>
               <ListDepartmentComponent />
+            </AdminRoute>
+          }
+          />
+
+          <Route path="/offices" element={
+            <AdminRoute>
+              <ListOfficeComponent />
             </AdminRoute>
           }
           />
