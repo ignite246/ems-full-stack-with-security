@@ -1,7 +1,7 @@
-package com.rahul.learning.ems.backend.security;
+package com.rahul.learning.ems.authservice.security;
 
-import com.rahul.learning.ems.backend.entities.User;
-import com.rahul.learning.ems.backend.repos.UserRepository;
+import com.rahul.learning.ems.authservice.entities.User;
+import com.rahul.learning.ems.authservice.repos.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jspecify.annotations.NonNull;
@@ -34,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toSet());
 
         return new org.springframework.security.core.userdetails.User(
-                usernameOrEmail, user.getPassword(),  grantedAuthorities
+                usernameOrEmail, user.getPassword(), grantedAuthorities
         );
     }
 }

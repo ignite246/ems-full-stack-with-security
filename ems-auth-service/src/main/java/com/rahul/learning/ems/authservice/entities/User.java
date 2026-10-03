@@ -1,4 +1,4 @@
-package com.rahul.learning.ems.backend.entities;
+package com.rahul.learning.ems.authservice.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

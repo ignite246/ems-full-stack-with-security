@@ -1,16 +1,18 @@
-import axios from "axios";
+import apiClient from "./ApiClient";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-console.log("DepartmentService::API_BASE_URL:", API_BASE_URL);
+const DEPT_REST_API_BASE_URL = "/departments";
 
-const DEPT_REST_API_BASE_URL = API_BASE_URL + "/departments";
+export const getAllDepartments = () =>
+    apiClient.get(DEPT_REST_API_BASE_URL);
 
-export const getAllDepartments = () => axios.get(DEPT_REST_API_BASE_URL);
+export const createDepartment = (department) =>
+    apiClient.post(DEPT_REST_API_BASE_URL, department);
 
-export const createDepartment = (department) => axios.post(DEPT_REST_API_BASE_URL, department);
+export const deleteDepartmentById = (id) =>
+    apiClient.delete(DEPT_REST_API_BASE_URL + "/" + id);
 
-export const deleteDepartmentById = (id) => axios.delete(DEPT_REST_API_BASE_URL + "/" + id);
+export const getDepartmentById = (id) =>
+    apiClient.get(DEPT_REST_API_BASE_URL + "/" + id);
 
-export const getDepartmentById = (id) => axios.get(DEPT_REST_API_BASE_URL + "/" + id);
-
-export const updateDepartment = (id, department) => axios.put(DEPT_REST_API_BASE_URL + "/" + id, department);
+export const updateDepartment = (id, department) =>
+    apiClient.put(DEPT_REST_API_BASE_URL + "/" + id, department);

@@ -1,8 +1,6 @@
-import axios from "axios";
+import apiClient from "./ApiClient";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-console.log("OfficeService::API_BASE_URL:", API_BASE_URL);
+const OFFICE_REST_API_BASE_URL = "/offices";
 
-const OFFICE_REST_API_BASE_URL = API_BASE_URL + "/offices";
-
-export const getAllOffices = () => axios.get(OFFICE_REST_API_BASE_URL);
+export const getAllOffices = () =>
+    apiClient.get(OFFICE_REST_API_BASE_URL);
