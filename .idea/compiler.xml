@@ -8,13 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ems-api-gateway" />
+        <module name="ems-service-registry" />
       </profile>
-      <profile name="Annotation profile for ems-auth-service" enabled="true">
+      <profile name="Annotation profile for ems-backend-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
         <module name="ems-auth-service" />
@@ -23,6 +23,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ems-service-registration" target="21" />
       <module name="EmsApiGateway" target="21" />
     </bytecodeTargetLevel>
   </component>
@@ -33,6 +34,8 @@
       <module name="ems-auth-service" options="-parameters" />
       <module name="ems-backend-service" options="-parameters" />
       <module name="ems-notification-service" options="-parameters" />
+      <module name="ems-service-registration" options="-parameters" />
+      <module name="ems-service-registry" options="-parameters" />
     </option>
   </component>
 </project>

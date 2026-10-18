@@ -4,9 +4,9 @@ import com.rahul.learning.ems.backend.dtos.notifications.NotificationRequestDTO;
 import com.rahul.learning.ems.backend.dtos.notifications.NotificationServiceRequestDTO;
 import com.rahul.learning.ems.backend.enums.EmployeeEventType;
 import com.rahul.learning.ems.backend.enums.NotificationType;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.ResponseEntity;
 import org.springframework.retry.RetryContext;
 import org.springframework.retry.annotation.Backoff;
@@ -20,14 +20,8 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
 @Log4j2
-@RequiredArgsConstructor
 @Service
 public class NotificationClientImpl implements NotificationClient {
-
-    private final RestClient notificationRestClient;
-
-    @Value("${notification.service.url}")
-    private String notificationServiceUrl;
 
     @Value("${notification.retry.max-attempts:3}")
     private int maxAttempts;
@@ -35,11 +29,19 @@ public class NotificationClientImpl implements NotificationClient {
     @Value("${notification.retry.backoff-delay:1000}")
     private int retryBackoffDelay;
 
+    private final RestClient.Builder notificationRestClientBuilder;
+
+    public NotificationClientImpl(@LoadBalanced RestClient.Builder notificationRestClientBuilder) {
+        this.notificationRestClientBuilder = notificationRestClientBuilder;
+    }
+
     @Override
     @Retryable(
             retryFor = ResourceAccessException.class,
             maxAttemptsExpression = "${notification.retry.max-attempts:3}",
-            backoff = @Backoff(delayExpression = "${notification.retry.backoff-delay:1000}")
+            backoff = @Backoff(
+                    delayExpression = "${notification.retry.backoff-delay:1000}"
+            )
     )
     public void send(NotificationRequestDTO request) {
 
@@ -61,7 +63,8 @@ public class NotificationClientImpl implements NotificationClient {
                         .type(NotificationType.valueOf(request.getEventType().name()))
                         .build();
 
-        String endpoint = notificationServiceUrl + "/api/notifications";
+        String endpoint =
+                "http://EMS-NOTIFICATION-SERVICE/notification-service/api/notifications";
 
         log.info(
                 "Sending notification request. employeeId={}, eventType={}, endpoint={}, attempt={}",
@@ -73,7 +76,8 @@ public class NotificationClientImpl implements NotificationClient {
 
         try {
 
-            ResponseEntity<Void> responseEntity = notificationRestClient
+            ResponseEntity<Void> responseEntity = notificationRestClientBuilder
+                    .build()
                     .post()
                     .uri(endpoint)
                     .body(notificationRequest)
@@ -116,7 +120,9 @@ public class NotificationClientImpl implements NotificationClient {
     }
 
     @Recover
-    public void recover(ResourceAccessException exception, NotificationRequestDTO request) {
+    public void recover(
+            ResourceAccessException exception,
+            NotificationRequestDTO request) {
 
         log.error(
                 "Notification delivery failed after all retry attempts. employeeId={}, eventType={}, attempts={}, backOffDelay={}",
@@ -138,10 +144,17 @@ public class NotificationClientImpl implements NotificationClient {
 
     private String getMessage(NotificationRequestDTO request) {
         return switch (request.getEventType()) {
-            case EMPLOYEE_CREATED -> "Employee " + request.getEmployeeName() + " has been successfully created.";
-            case EMPLOYEE_UPDATED -> "Employee " + request.getEmployeeName() + " has been successfully updated.";
-            case EMPLOYEE_DELETED -> "Employee " + request.getEmployeeName() + " has been successfully deleted.";
-            // default -> "An employee notification has been generated."; //not required
+            case EMPLOYEE_CREATED ->
+                    "Employee " + request.getEmployeeName() +
+                            " has been successfully created.";
+
+            case EMPLOYEE_UPDATED ->
+                    "Employee " + request.getEmployeeName() +
+                            " has been successfully updated.";
+
+            case EMPLOYEE_DELETED ->
+                    "Employee " + request.getEmployeeName() +
+                            " has been successfully deleted.";
         };
     }
 }
