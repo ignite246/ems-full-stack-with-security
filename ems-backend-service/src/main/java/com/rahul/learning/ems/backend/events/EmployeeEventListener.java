@@ -19,9 +19,10 @@ public class EmployeeEventListener {
     public void handleEmployeeEvent(EmployeeEvent event) {
 
         log.info(
-                "Processing employee event after transaction commit. employeeId={}, eventType={}",
+                "Processing employee event after transaction commit. employeeId={}, eventType={}, correlationId={}",
                 event.getEmployeeId(),
-                event.getEventType()
+                event.getEventType(),
+                event.getCorrelationId()
         );
 
         NotificationRequestDTO request = NotificationRequestDTO.builder()
@@ -31,6 +32,6 @@ public class EmployeeEventListener {
                 .eventType(event.getEventType())
                 .build();
 
-        notificationClient.send(request);
+        notificationClient.send(request, event.getCorrelationId());
     }
 }

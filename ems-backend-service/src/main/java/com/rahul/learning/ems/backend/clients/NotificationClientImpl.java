@@ -39,11 +39,9 @@ public class NotificationClientImpl implements NotificationClient {
     @Retryable(
             retryFor = ResourceAccessException.class,
             maxAttemptsExpression = "${notification.retry.max-attempts:3}",
-            backoff = @Backoff(
-                    delayExpression = "${notification.retry.backoff-delay:1000}"
-            )
+            backoff = @Backoff(delayExpression = "${notification.retry.backoff-delay:1000}")
     )
-    public void send(NotificationRequestDTO request) {
+    public void send(NotificationRequestDTO request, String correlationId) {
 
         RetryContext context = RetrySynchronizationManager.getContext();
         int attempt = context != null ? context.getRetryCount() + 1 : 1;
@@ -67,11 +65,11 @@ public class NotificationClientImpl implements NotificationClient {
                 "http://EMS-NOTIFICATION-SERVICE/notification-service/api/notifications";
 
         log.info(
-                "Sending notification request. employeeId={}, eventType={}, endpoint={}, attempt={}",
+                "Notification delivery attempt started. employeeId={}, eventType={}, attempt={}, correlationId={}",
                 request.getEmployeeId(),
                 request.getEventType(),
-                endpoint,
-                attempt
+                attempt,
+                correlationId
         );
 
         try {
@@ -80,16 +78,18 @@ public class NotificationClientImpl implements NotificationClient {
                     .build()
                     .post()
                     .uri(endpoint)
+                    .header("X-Correlation-ID", correlationId)
                     .body(notificationRequest)
                     .retrieve()
                     .toBodilessEntity();
 
             log.info(
-                    "Notification delivered successfully. employeeId={}, eventType={}, status={}, attempt={}",
+                    "Sending notification request. employeeId={}, eventType={}, endpoint={}, attempt={}, correlationId={}",
                     request.getEmployeeId(),
                     request.getEventType(),
-                    responseEntity.getStatusCode(),
-                    attempt
+                    endpoint,
+                    attempt,
+                    correlationId
             );
 
         } catch (HttpClientErrorException ex) {

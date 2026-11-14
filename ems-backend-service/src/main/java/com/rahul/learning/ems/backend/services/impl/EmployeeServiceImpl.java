@@ -2,7 +2,6 @@ package com.rahul.learning.ems.backend.services.impl;
 
 import com.rahul.learning.ems.backend.clients.NotificationClient;
 import com.rahul.learning.ems.backend.dtos.EmployeeDTO;
-import com.rahul.learning.ems.backend.dtos.notifications.NotificationRequestDTO;
 import com.rahul.learning.ems.backend.entities.Department;
 import com.rahul.learning.ems.backend.entities.Employee;
 import com.rahul.learning.ems.backend.entities.Office;
@@ -24,6 +23,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.MDC;
 
 import java.util.List;
 
@@ -81,6 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .employeeName(savedEmployee.getFirstName() + " " + savedEmployee.getLastName())
                 .employeeEmail(savedEmployee.getEmail())
                 .eventType(EmployeeEventType.EMPLOYEE_CREATED)
+                .correlationId(MDC.get("correlationId"))
                 .build();
 
         //async::publishing EMPLOYEE_CREATED Spring event
@@ -143,6 +144,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .employeeName(updatedEmployee.getFirstName() + " " + updatedEmployee.getLastName())
                 .employeeEmail(updatedEmployee.getEmail())
                 .eventType(EmployeeEventType.EMPLOYEE_UPDATED)
+                .correlationId(MDC.get("correlationId"))
                 .build();
 
         //async::publishing EMPLOYEE_UPDATE Spring event
@@ -181,6 +183,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .employeeName(employee.getFirstName() + " " + employee.getLastName())
                 .employeeEmail(employee.getEmail())
                 .eventType(EmployeeEventType.EMPLOYEE_DELETED)
+                .correlationId(MDC.get("correlationId"))
                 .build();
 
         //async::publishing EMPLOYEE_DELETED Spring event
