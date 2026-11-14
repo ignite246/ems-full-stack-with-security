@@ -4,5 +4,5 @@ import com.rahul.learning.ems.backend.dtos.notifications.NotificationRequestDTO;
 
 public interface NotificationClient {
 
-    void send(NotificationRequestDTO notificationRequestDTO);
+    void send(NotificationRequestDTO notificationRequestDTO, String correlationId);
 }

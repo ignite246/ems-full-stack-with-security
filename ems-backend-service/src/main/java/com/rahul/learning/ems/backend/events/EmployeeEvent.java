@@ -17,4 +17,5 @@ public class EmployeeEvent {
     private final String employeeName;
     private final String employeeEmail;
     private final EmployeeEventType eventType;
+    private final String correlationId;
 }
